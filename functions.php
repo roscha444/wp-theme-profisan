@@ -42,14 +42,78 @@ function profisan_setup() {
 }
 add_action( 'after_setup_theme', 'profisan_setup' );
 
+// ===== ProfiSan Kontaktformular (SRK Contact Forms Plugin) =====
+
+function profisan_register_contact_form( $forms ) {
+	$forms['profisan'] = array(
+		'title'        => 'ProfiSan Kontaktformular',
+		'recipient'    => 'info@profisan-gmbh.de',
+		'subject'      => 'Kontaktanfrage über die Website',
+		'fields'       => array(
+			array(
+				'name'        => 'name',
+				'label'       => 'Name',
+				'type'        => 'text',
+				'required'    => true,
+				'placeholder' => 'Ihr Name',
+				'width'       => 'half',
+			),
+			array(
+				'name'        => 'email',
+				'label'       => 'E-Mail',
+				'type'        => 'email',
+				'required'    => true,
+				'placeholder' => 'Ihre E-Mail-Adresse',
+				'width'       => 'half',
+			),
+			array(
+				'name'        => 'phone',
+				'label'       => 'Telefon (optional)',
+				'type'        => 'tel',
+				'required'    => false,
+				'placeholder' => 'Ihre Telefonnummer',
+				'width'       => 'full',
+			),
+			array(
+				'name'        => 'subject',
+				'label'       => 'Betreff',
+				'type'        => 'select',
+				'required'    => true,
+				'width'       => 'full',
+				'options'     => array(
+					''               => 'Bitte wählen...',
+					'malerarbeiten'  => 'Maler- und Lackiererarbeiten',
+					'wasserschaden'  => 'Brand- & Wasserschadensanierung',
+					'schimmel'       => 'Schimmelsanierung',
+					'altbau'         => 'Energetische Altbausanierung',
+					'sonstiges'      => 'Sonstiges',
+				),
+			),
+			array(
+				'name'        => 'message',
+				'label'       => 'Nachricht',
+				'type'        => 'textarea',
+				'required'    => true,
+				'placeholder' => 'Beschreiben Sie kurz Ihr Anliegen...',
+				'width'       => 'full',
+			),
+		),
+		'privacy_page' => '/datenschutz/',
+		'submit_label' => 'Nachricht senden',
+		'success_msg'  => 'Vielen Dank für Ihre Anfrage! Wir melden uns in Kürze bei Ihnen.',
+	);
+	return $forms;
+}
+add_filter( 'srk_contact_forms', 'profisan_register_contact_form' );
+
 // ===== Multi-Domain: .com als Demo, .de als primäre Domain =====
 
 define( 'PROFISAN_PRIMARY_DOMAIN', 'www.profisan-gmbh.de' );
 define( 'PROFISAN_DEMO_DOMAIN', 'www.profisan-gmbh.com' );
 
 function profisan_is_demo_domain() {
-	$host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : '';
-	return ( $host === PROFISAN_DEMO_DOMAIN || $host === 'profisan-gmbh.com' );
+	$host = isset( $_SERVER['HTTP_HOST'] ) ? strtolower( explode( ':', $_SERVER['HTTP_HOST'] )[0] ) : '';
+	return in_array( $host, array( 'www.profisan-gmbh.com', 'profisan-gmbh.com' ), true );
 }
 
 // Demo-Domain: noindex + canonical auf .de
@@ -60,7 +124,9 @@ function profisan_demo_domain_head() {
 	echo '<meta name="robots" content="noindex, nofollow">' . "\n";
 
 	$path = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '/';
-	echo '<link rel="canonical" href="https://' . esc_attr( PROFISAN_PRIMARY_DOMAIN ) . esc_attr( $path ) . '">' . "\n";
+	$path = preg_replace( '#[\r\n\0]#', '', $path );
+	$canonical = 'https://' . PROFISAN_PRIMARY_DOMAIN . $path;
+	echo '<link rel="canonical" href="' . esc_url( $canonical ) . '">' . "\n";
 }
 add_action( 'wp_head', 'profisan_demo_domain_head', 1 );
 
@@ -153,7 +219,7 @@ function profisan_maintenance_rest_block( $result ) {
 	if ( ! get_option( 'profisan_maintenance_mode', false ) ) {
 		return $result;
 	}
-	if ( current_user_can( 'manage_options' ) ) {
+	if ( is_user_logged_in() && current_user_can( 'manage_options' ) ) {
 		return $result;
 	}
 	return new WP_Error(
@@ -191,7 +257,8 @@ function profisan_maintenance_block_images() {
 		return;
 	}
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
-	if ( preg_match( '#/wp-content/themes/profisan-theme/assets/images/#i', $request_uri ) ) {
+	$request_uri = preg_replace( '#[\r\n\0]#', '', rawurldecode( $request_uri ) );
+	if ( strpos( $request_uri, '/wp-content/themes/profisan-theme/assets/images/' ) !== false ) {
 		status_header( 403 );
 		exit;
 	}

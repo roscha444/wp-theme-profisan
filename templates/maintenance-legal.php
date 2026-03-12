@@ -34,10 +34,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="container" style="max-width: 800px; margin: 0 auto; padding: 160px 24px 80px;">
       <h1><?php echo esc_html( get_the_title() ); ?></h1>
       <?php
-      // Output the page content from the database
       while ( have_posts() ) :
           the_post();
-          the_content();
+          if ( 'publish' === get_post_status() ) :
+              the_content();
+          endif;
       endwhile;
       ?>
     </div>
