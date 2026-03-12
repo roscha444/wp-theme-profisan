@@ -15,9 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo esc_html( get_the_title() ); ?> — ProfiSan GmbH</title>
   <meta name="robots" content="noindex, nofollow">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <?php wp_enqueue_style( 'profisan-custom' ); wp_head(); ?>
 </head>
 <body>

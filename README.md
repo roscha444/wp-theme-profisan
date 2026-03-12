@@ -7,8 +7,8 @@ WordPress Full Site Editing Theme für profisan-gmbh.de.
 | Ressource | Verwendung | Lizenz |
 |---|---|---|
 | WordPress | CMS / Block Theme Engine | GPL v2+ |
-| Bitter | Heading-Schrift (Google Fonts) | SIL Open Font License 1.1 |
-| Nunito Sans | Body-Schrift (Google Fonts) | SIL Open Font License 1.1 |
+| Bitter | Heading-Schrift (lokal gehostet) | SIL Open Font License 1.1 |
+| Nunito Sans | Body-Schrift (lokal gehostet) | SIL Open Font License 1.1 |
 
 **Icons:** Alle SVG-Icons sind inline eingebettet. Es wird keine externe Icon-Bibliothek geladen.
 

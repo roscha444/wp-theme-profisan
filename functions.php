@@ -8,15 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function profisan_enqueue_assets() {
-	// Google Fonts
-	wp_enqueue_style(
-		'profisan-google-fonts',
-		'https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&display=swap',
-		array(),
-		null
-	);
-
-	// Custom CSS
+	// Custom CSS (includes local @font-face declarations)
 	wp_enqueue_style(
 		'profisan-custom',
 		get_template_directory_uri() . '/assets/css/custom.css',
