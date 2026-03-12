@@ -13,3 +13,7 @@ WordPress Full Site Editing Theme für profisan-gmbh.de.
 **Icons:** Alle SVG-Icons sind inline eingebettet. Es wird keine externe Icon-Bibliothek geladen.
 
 **CSS-Frameworks:** Keine. Das Styling ist komplett eigenes CSS ohne externe Abhängigkeiten.
+
+## Sicherheit
+
+Das Theme ist kompatibel mit strikter Content Security Policy (CSP) ohne `unsafe-inline`. Alle Scripts und Styles werden über `wp_enqueue_*` geladen und erhalten automatisch ein Nonce vom [SRK Security](https://github.com/roscha444/wp-plugins) Plugin.
