@@ -7,9 +7,6 @@ wp-config.php
 .env
 .env.*
 
-# Deploy config (enthält Server-Credentials)
-deploy/config.sh
-
 # OS
 .DS_Store
 Thumbs.db
