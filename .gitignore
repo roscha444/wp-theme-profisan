@@ -1,0 +1,24 @@
+# WordPress
+wp-config.php
+*.sql
+*.sql.gz
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node
+node_modules/
+
+# Logs
+*.log
