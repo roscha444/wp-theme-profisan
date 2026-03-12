@@ -34,6 +34,15 @@ function profisan_setup() {
 }
 add_action( 'after_setup_theme', 'profisan_setup' );
 
+// Favicon
+function profisan_favicon() {
+	$dir = get_template_directory_uri() . '/assets/images';
+	echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url( $dir . '/favicon-32.png' ) . '">' . "\n";
+	echo '<link rel="apple-touch-icon" sizes="180x180" href="' . esc_url( $dir . '/apple-touch-icon.png' ) . '">' . "\n";
+	echo '<link rel="icon" type="image/png" sizes="512x512" href="' . esc_url( $dir . '/favicon-512.png' ) . '">' . "\n";
+}
+add_action( 'wp_head', 'profisan_favicon' );
+
 // ===== ProfiSan Kontaktformular (SRK Contact Forms Plugin) =====
 
 function profisan_register_contact_form( $forms ) {
