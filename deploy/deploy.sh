@@ -120,61 +120,73 @@ deploy_content() {
   PAGES_COUNT=$(python3 -c "import json; print(len(json.load(open('$TMP_DIR/pages.json'))))")
   echo "  $PAGES_COUNT Seiten exportiert"
 
-  # Sync-Script generieren
+  # Sync-Script generieren (nur Logik, keine Daten)
   SYNC_TOKEN=$(openssl rand -hex 32)
-  PAGES_B64=$(base64 < "$TMP_DIR/pages.json")
-  OPTIONS_B64=$(base64 < "$TMP_DIR/options.json")
 
-  cat > "$TMP_DIR/srk-sync.php" <<PHPEOF
+  cat > "$TMP_DIR/srk-sync.php" <<'PHPEOF'
 <?php
-if ( ! isset( \$_GET['token'] ) || \$_GET['token'] !== '$SYNC_TOKEN' ) {
+// Content-Sync — löscht sich nach Ausführung selbst.
+// Daten kommen ausschließlich per POST-Body (kein Dateisystem).
+$headers = getallheaders();
+if ( ! isset( $headers['X-Sync-Token'] ) || $headers['X-Sync-Token'] !== '%%TOKEN%%' ) {
     http_response_code( 403 );
     exit( 'Forbidden' );
+}
+if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
+    http_response_code( 405 );
+    exit( 'POST required' );
+}
+
+$payload = json_decode( file_get_contents( 'php://input' ), true );
+if ( ! $payload || ! isset( $payload['pages'], $payload['options'] ) ) {
+    http_response_code( 400 );
+    exit( 'Invalid payload' );
 }
 
 define( 'ABSPATH', __DIR__ . '/' );
 define( 'WPINC', 'wp-includes' );
 require_once ABSPATH . 'wp-load.php';
 
-\$results = [];
+$results = [];
 
 // Seiten synchronisieren
-\$pages = json_decode( base64_decode( '$PAGES_B64' ), true );
-foreach ( \$pages as \$page ) {
-    \$existing = get_page_by_path( \$page['slug'] );
-    if ( \$existing ) {
+foreach ( $payload['pages'] as $page ) {
+    $existing = get_page_by_path( $page['slug'] );
+    if ( $existing ) {
         wp_update_post( [
-            'ID'           => \$existing->ID,
-            'post_title'   => \$page['title'],
-            'post_content' => \$page['content'],
+            'ID'           => $existing->ID,
+            'post_title'   => $page['title'],
+            'post_content' => $page['content'],
             'post_status'  => 'publish',
         ] );
-        \$results[] = "'{$page['title']}' aktualisiert";
+        $results[] = "'{$page['title']}' aktualisiert";
     } else {
         wp_insert_post( [
-            'post_title'   => \$page['title'],
-            'post_name'    => \$page['slug'],
-            'post_content' => \$page['content'],
+            'post_title'   => $page['title'],
+            'post_name'    => $page['slug'],
+            'post_content' => $page['content'],
             'post_status'  => 'publish',
             'post_type'    => 'page',
         ] );
-        \$results[] = "'{$page['title']}' angelegt";
+        $results[] = "'{$page['title']}' angelegt";
     }
 }
 
 // Optionen synchronisieren
-\$options = json_decode( base64_decode( '$OPTIONS_B64' ), true );
-foreach ( \$options as \$key => \$value ) {
-    update_option( \$key, \$value );
+foreach ( $payload['options'] as $key => $value ) {
+    update_option( $key, $value );
 }
-\$results[] = count( \$options ) . ' Optionen synchronisiert';
+$results[] = count( $payload['options'] ) . ' Optionen synchronisiert';
 
 @unlink( __FILE__ );
-\$results[] = 'Sync-Script gelöscht';
+$results[] = 'Sync-Script gelöscht';
 
 header( 'Content-Type: text/plain; charset=utf-8' );
-echo implode( "\\n", \$results ) . "\\n";
+echo implode( "\n", $results ) . "\n";
 PHPEOF
+
+  # Token einsetzen
+  sed -i '' "s/%%TOKEN%%/$SYNC_TOKEN/" "$TMP_DIR/srk-sync.php"
 
   echo "→ DB auf Server synchronisieren..."
   $LFTP <<EOF
@@ -182,7 +194,19 @@ put "$TMP_DIR/srk-sync.php" -o "$FTP_WP_PATH/srk-sync.php"
 quit
 EOF
 
-  RESULT=$(curl -sf "$DOMAIN/srk-sync.php?token=$SYNC_TOKEN" 2>&1) || {
+  # Daten per POST senden — landen nur im RAM, nie auf der Festplatte
+  PAYLOAD=$(python3 -c "
+import json
+pages = json.load(open('$TMP_DIR/pages.json'))
+options = json.load(open('$TMP_DIR/options.json'))
+print(json.dumps({'pages': pages, 'options': options}))
+")
+
+  RESULT=$(curl -sf -X POST \
+    -H "Content-Type: application/json" \
+    -H "X-Sync-Token: $SYNC_TOKEN" \
+    -d "$PAYLOAD" \
+    "$DOMAIN/srk-sync.php" 2>&1) || {
     echo "  FEHLER: Sync-Script konnte nicht ausgeführt werden."
     echo "  Lösche srk-sync.php manuell vom Server!"
     exit 1
