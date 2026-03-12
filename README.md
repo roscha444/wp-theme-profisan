@@ -16,4 +16,4 @@ WordPress Full Site Editing Theme für profisan-gmbh.de.
 
 ## Sicherheit
 
-Das Theme ist kompatibel mit strikter Content Security Policy (CSP) ohne `unsafe-inline`. Alle Scripts und Styles werden über `wp_enqueue_*` geladen und erhalten automatisch ein Nonce vom [SRK Security](https://github.com/roscha444/wp-plugins) Plugin.
+Alle Scripts und Styles werden über `wp_enqueue_*` geladen — keine inline Scripts oder Styles. Dadurch ist das Theme kompatibel mit strikter CSP (z.B. via [SRK Security](https://github.com/roscha444/wp-plugins)), funktioniert aber auch ohne.
