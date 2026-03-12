@@ -1,0 +1,13 @@
+# Deploy-Konfiguration — kopiere als config.sh und passe an
+# cp config.sh.example config.sh
+
+SSH_HOST="user@server.example.com"
+SSH_PORT="22"
+WP_PATH="/var/www/profisan-gmbh"          # WordPress-Installationsverzeichnis auf dem Server
+WP_CLI="wp"                                # WP-CLI Binary auf dem Server
+DOMAIN="www.profisan-gmbh.de"
+DB_PREFIX="pfs_"                           # Custom table prefix
+
+# Git Repos (werden auf dem Server geclont/gepullt)
+THEME_REPO="https://github.com/roscha444/wp-theme-profisan.git"
+PLUGINS_REPO="https://github.com/roscha444/wp-plugins.git"
