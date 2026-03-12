@@ -43,39 +43,6 @@ function profisan_favicon() {
 }
 add_action( 'wp_head', 'profisan_favicon' );
 
-// ===== Multi-Domain: .com als Demo, .de als primäre Domain =====
-
-define( 'PROFISAN_PRIMARY_DOMAIN', 'www.profisan-gmbh.de' );
-define( 'PROFISAN_DEMO_DOMAIN', 'www.profisan-gmbh.com' );
-
-function profisan_is_demo_domain() {
-	$host = isset( $_SERVER['HTTP_HOST'] ) ? strtolower( explode( ':', $_SERVER['HTTP_HOST'] )[0] ) : '';
-	return in_array( $host, array( 'www.profisan-gmbh.com', 'profisan-gmbh.com' ), true );
-}
-
-// Demo-Domain: noindex + canonical auf .de
-function profisan_demo_domain_head() {
-	if ( ! profisan_is_demo_domain() ) {
-		return;
-	}
-	echo '<meta name="robots" content="noindex, nofollow">' . "\n";
-
-	$path = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '/';
-	$path = preg_replace( '#[\r\n\0]#', '', $path );
-	$canonical = 'https://' . PROFISAN_PRIMARY_DOMAIN . $path;
-	echo '<link rel="canonical" href="' . esc_url( $canonical ) . '">' . "\n";
-}
-add_action( 'wp_head', 'profisan_demo_domain_head', 1 );
-
-// Demo-Domain: X-Robots-Tag Header als zusätzliche Absicherung
-function profisan_demo_domain_headers() {
-	if ( ! profisan_is_demo_domain() ) {
-		return;
-	}
-	header( 'X-Robots-Tag: noindex, nofollow', true );
-}
-add_action( 'send_headers', 'profisan_demo_domain_headers' );
-
 // ===== Wartungsmodus =====
 
 // ===== Wartungsmodus – Einstellungsseite =====
