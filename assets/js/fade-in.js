@@ -1,14 +1,29 @@
-// Scroll-to-top visibility
+// Scroll-to-top visibility + admin bar offset fix
 (function() {
   var btn = document.querySelector('.scroll-top');
-  if (btn) {
-    window.addEventListener('scroll', function() {
+  var header = document.querySelector('.site-header');
+  var adminBar = document.getElementById('wpadminbar');
+
+  window.addEventListener('scroll', function() {
+    if (btn) {
       if (window.scrollY > 400) {
         btn.classList.add('visible');
       } else {
         btn.classList.remove('visible');
       }
-    });
+    }
+    // On mobile, admin bar is position:absolute and scrolls away
+    if (header && adminBar) {
+      var barBottom = adminBar.getBoundingClientRect().bottom;
+      if (barBottom <= 0) {
+        header.classList.add('admin-bar-hidden');
+      } else {
+        header.classList.remove('admin-bar-hidden');
+      }
+    }
+  });
+
+  if (btn) {
     btn.addEventListener('click', function() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });

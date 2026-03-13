@@ -74,6 +74,10 @@ body {
 @media (max-width: 782px) {
   .admin-bar .site-header {
     top: 46px;
+    transition: top 0.2s ease;
+  }
+  .admin-bar .site-header.admin-bar-hidden {
+    top: 0;
   }
 }
 
