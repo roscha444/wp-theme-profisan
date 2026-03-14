@@ -3,6 +3,36 @@
   margin-block-start: 0 !important;
 }
 
+/* ===== 404 Error Page ===== */
+.error-404 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 80px 24px;
+}
+.error-404 h1 {
+  font-family: var(--heading);
+  font-size: 2.4rem;
+  color: var(--forest-dark);
+  margin: 0 0 16px;
+}
+.error-404 p {
+  font-size: 1.1rem;
+  color: var(--forest-light);
+  margin: 0 0 32px;
+  max-width: 480px;
+}
+.error-404 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  font-size: 1rem;
+}
+
 /* ===== Local Fonts ===== */
 
 @font-face {
