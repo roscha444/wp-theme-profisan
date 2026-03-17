@@ -233,7 +233,7 @@ body {
   align-items: center;
   position: relative;
   overflow: hidden;
-  background: url('/wp-content/themes/profisan-theme/assets/images/sanieren.jpg') center/cover no-repeat;
+  background: url('/wp-content/themes/profisan-theme/assets/images/referenzen/komplettsanierung.jpg') center/cover no-repeat;
 }
 
 .hero::before {
@@ -382,18 +382,18 @@ body {
   font-weight: 700;
   font-size: 1rem;
   color: var(--forest-dark);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.75);
   padding: 14px 24px;
   border-radius: var(--radius-btn);
-  border: 2px solid rgba(74, 74, 74, 0.25);
+  border: 1px solid rgba(74, 74, 74, 0.1);
   cursor: pointer;
   text-decoration: none;
   transition: border-color var(--transition), background-color var(--transition), transform var(--transition);
 }
 
 .btn-secondary:hover {
-  border-color: var(--forest);
-  background: rgba(74, 74, 74, 0.05);
+  border-color: rgba(74, 74, 74, 0.2);
+  background: rgba(255, 255, 255, 0.9);
   transform: translateY(-1px);
   color: var(--forest-dark);
 }
@@ -434,6 +434,20 @@ body {
   position: relative;
   z-index: 1;
   margin-top: -1px;
+  clip-path: inset(0);
+}
+
+.willkommen-logo-bg {
+  position: fixed;
+  right: -3%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 650px;
+  height: 650px;
+  background: url('/wp-content/themes/profisan-theme/assets/images/logo_icon.png') center/contain no-repeat;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .willkommen-inner {
@@ -443,10 +457,14 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 56px;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .willkommen-text .section-title {
-  margin-bottom: 24px;
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .willkommen-text p {
@@ -466,7 +484,10 @@ body {
   overflow: hidden;
   aspect-ratio: 4 / 3;
   box-shadow: 0 0 0 1px rgba(74, 74, 74, 0.12), 0 0 0 5px var(--white), 0 0 0 6px rgba(74, 74, 74, 0.08);
+  background: var(--linen);
+  z-index: 1;
 }
+
 
 .willkommen-image img {
   width: 100%;
@@ -528,7 +549,7 @@ body {
 
 /* ===== LEISTUNGEN ===== */
 .leistungen {
-  padding: 100px 24px 100px 60px;
+  padding: 130px 24px 130px 60px;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -762,7 +783,7 @@ body {
   gap: 6px;
   font-weight: 700;
   font-size: 0.9rem;
-  color: var(--cta) !important;
+  color: var(--accent) !important;
   text-decoration: none;
   transition: gap var(--transition);
 }
@@ -771,8 +792,14 @@ body {
 
 /* ===== UEBER UNS ===== */
 .ueber-uns {
-  background: linear-gradient(170deg, rgba(74, 74, 74, 0.05) 0%, rgba(74, 74, 74, 0.10) 100%);
+  background: rgba(74, 74, 74, 0.07);
   padding: 80px 24px 100px;
+  margin-block-start: 0;
+}
+
+.zitat-section {
+  background: rgba(74, 74, 74, 0.07);
+  padding: 80px 24px;
   margin-block-start: 0;
 }
 
@@ -811,6 +838,72 @@ body {
   font-weight: 400;
 }
 
+/* ===== KONTAKT MAP ===== */
+.kontakt-map {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.rhein-main-karte {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+
+.karte-stadt {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  fill: rgba(74, 74, 74, 0.5);
+}
+
+.karte-stadt-lg {
+  font-size: 11px;
+  fill: rgba(74, 74, 74, 0.6);
+}
+
+.karte-stadt-sm {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 8.5px;
+  font-weight: 600;
+  fill: rgba(74, 74, 74, 0.4);
+}
+
+.karte-standort {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  fill: var(--cta);
+}
+
+.karte-label {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  fill: rgba(74, 74, 74, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.standort-pulse {
+  animation: standortPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes standortPulse {
+  0%, 100% { r: 18; opacity: 1; }
+  50% { r: 24; opacity: 0.5; }
+}
+
+.radius-pulse {
+  animation: radiusPulse 4s ease-in-out infinite;
+}
+
+@keyframes radiusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 /* ===== KONTAKT ===== */
 .kontakt-top {
   max-width: 1100px;
@@ -840,7 +933,7 @@ body {
 
 .kontakt-quote-row {
   max-width: 1100px;
-  margin: 100px auto 0;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 30% 70%;
   gap: 32px;
@@ -874,13 +967,21 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-top: 32px;
+  align-items: center;
+}
+
+.kontakt-details-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
 .kontakt-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: #555;
   padding: 6px 0;
 }
@@ -902,8 +1003,8 @@ body {
 
 .kontakt-phone a {
   font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--forest-dark) !important;
+  font-weight: 400;
+  color: #555;
 }
 
 /* SRK Contact Form Plugin – ProfiSan Overrides */
@@ -1244,6 +1345,7 @@ body {
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
+  color: rgba(240, 235, 227, 0.7);
 }
 
 .footer-contact-item svg {
@@ -1286,7 +1388,7 @@ body {
 }
 
 .footer-bottom-links a {
-  color: rgba(240, 235, 227, 0.45);
+  color: rgba(240, 235, 227, 0.7);
   text-decoration: none;
   font-size: 0.85rem;
   transition: color var(--transition);
@@ -1415,20 +1517,20 @@ body {
 .footer-credit-link {
   display: inline-block;
   font-size: 0.7rem;
-  color: rgba(240, 235, 227, 0.2);
+  color: rgba(240, 235, 227, 0.65);
   text-decoration: none;
   letter-spacing: 0.03em;
-  background: rgba(240, 235, 227, 0.05);
+  background: rgba(240, 235, 227, 0.12);
   padding: 5px 14px;
   border-radius: 20px;
-  border: 1px solid rgba(240, 235, 227, 0.06);
+  border: 1px solid rgba(240, 235, 227, 0.15);
   transition: color var(--transition), background var(--transition), border-color var(--transition);
 }
 
 .footer-credit-link:hover {
-  color: rgba(240, 235, 227, 0.6);
-  background: rgba(240, 235, 227, 0.1);
-  border-color: rgba(240, 235, 227, 0.12);
+  color: rgba(240, 235, 227, 0.85);
+  background: rgba(240, 235, 227, 0.18);
+  border-color: rgba(240, 235, 227, 0.25);
 }
 
 .footer-bottom-separator {
