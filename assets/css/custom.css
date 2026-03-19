@@ -233,7 +233,40 @@ body {
   align-items: center;
   position: relative;
   overflow: hidden;
-  background: url('/wp-content/themes/profisan-theme/assets/images/referenzen/komplettsanierung.jpg') center/cover no-repeat;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.hero-bg-1 {
+  background-image: url('/wp-content/themes/profisan-theme/assets/images/referenzen/komplettsanierung.jpg');
+  animation: heroSlide 30s ease-in-out infinite;
+}
+.hero-bg-2 {
+  background-image: url('/wp-content/themes/profisan-theme/assets/images/maler-lackierer.jpg');
+  animation: heroSlide 30s ease-in-out infinite;
+  animation-delay: 10s;
+  opacity: 0;
+}
+.hero-bg-3 {
+  background-image: url('/wp-content/themes/profisan-theme/assets/images/sanieren.jpg');
+  animation: heroSlide 30s ease-in-out infinite;
+  animation-delay: 20s;
+  opacity: 0;
+}
+
+@keyframes heroSlide {
+  0%   { opacity: 0; }
+  3%   { opacity: 1; }
+  33%  { opacity: 1; }
+  36%  { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 .hero::before {
@@ -241,7 +274,7 @@ body {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, #e8edf2 0%, #eae7e2 30%, rgba(243, 240, 235, 0.75) 55%, rgba(62, 170, 224, 0.15) 80%, rgba(62, 170, 224, 0.3) 100%);
-  z-index: 0;
+  z-index: 2;
 }
 
 .hero-container {
@@ -253,7 +286,7 @@ body {
   gap: 60px;
   align-items: center;
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 .hero-content {
@@ -297,7 +330,7 @@ body {
   color: #555;
   margin-bottom: 36px;
   max-width: 500px;
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .hero-actions {
@@ -317,26 +350,46 @@ body {
   border: 1px solid rgba(74, 74, 74, 0.1);
 }
 
-.hero-leistung-item {
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(74, 74, 74, 0.08);
-  transition: transform var(--transition);
+.hero-leistungen-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: none !important;
+}
+
+.hero-leistung-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  border-radius: var(--radius);
+  border: 1px solid rgba(74, 74, 74, 0.08);
+  transition: transform var(--transition), box-shadow var(--transition);
   cursor: default;
 }
 
-.hero-leistung-item:last-child {
-  border-bottom: none;
+.hero-leistung-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-medium);
 }
 
-.hero-leistung-item:hover {
-  transform: translateX(4px);
+.hero-leistung-card svg {
+  color: var(--accent);
+  flex-shrink: 0;
 }
 
-.hero-leistung-item strong {
-  font-size: 0.95rem;
+.hero-leistung-card span {
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--forest-dark);
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 /* ===== BUTTONS ===== */
@@ -380,23 +433,25 @@ body {
   gap: 8px;
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--forest-dark);
   background: rgba(255, 255, 255, 0.75);
-  padding: 14px 24px;
+  padding: 15px 24px;
   border-radius: var(--radius-btn);
-  border: 1px solid rgba(74, 74, 74, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   cursor: pointer;
   text-decoration: none;
   transition: border-color var(--transition), background-color var(--transition), transform var(--transition);
 }
 
 .btn-secondary:hover {
-  border-color: rgba(74, 74, 74, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
   background: rgba(255, 255, 255, 0.9);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   color: var(--forest-dark);
 }
+
+.btn-secondary:active { transform: translateY(0); }
 
 /* ===== FADE-IN ===== */
 .fade-in {
@@ -429,7 +484,7 @@ body {
 
 /* ===== WILLKOMMEN ===== */
 .willkommen {
-  padding: 100px 24px;
+  padding: 160px 24px;
   background: var(--white);
   position: relative;
   z-index: 1;
@@ -463,8 +518,30 @@ body {
 
 .willkommen-text .section-title {
   font-size: clamp(1.3rem, 2.5vw, 1.7rem);
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  margin-top: -36px;
   font-weight: 600;
+  text-align: center;
+}
+
+.section-title-sub {
+  display: block;
+  text-align: right;
+  font-size: 0.85em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.section-title-pill {
+  display: inline-block;
+  background: rgba(62, 170, 224, 0.12);
+  color: var(--accent);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  padding: 10px 28px;
+  border-radius: 30px;
+  letter-spacing: 0.01em;
 }
 
 .willkommen-text p {
@@ -549,7 +626,7 @@ body {
 
 /* ===== LEISTUNGEN ===== */
 .leistungen {
-  padding: 130px 24px 130px 60px;
+  padding: 150px 24px 150px 60px;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -799,7 +876,7 @@ body {
 
 .zitat-section {
   background: rgba(74, 74, 74, 0.07);
-  padding: 80px 24px;
+  padding: 120px 24px 100px;
   margin-block-start: 0;
 }
 
@@ -810,11 +887,10 @@ body {
 }
 
 .ueber-uns-quote {
-  font-family: 'Bitter', Georgia, serif;
   font-size: 1.15rem;
   line-height: 1.6;
   color: var(--forest-dark);
-  font-style: normal;
+  font-style: italic;
   border-left: 3px solid var(--burnt-orange);
   padding-left: 20px;
   margin: 16px 0 6px;
